@@ -11,7 +11,7 @@ addtaskbutton.addEventListener('click',function(){
     const tasktest = todoinput.value.trim()
     if(tasktest === "") return;  // check whether the input is written or not
     const newtask ={
-        id:Date.now,
+        id:Date.now(),
         text:tasktest,
         completed:false
     }// creates a new task , id for the to do
@@ -19,6 +19,7 @@ addtaskbutton.addEventListener('click',function(){
     savetasks()
     todoinput.value = "" // clear the value
     console.log(tasks);
+    rendertask(newtask); // render the task
     
 });
 function rendertask(t){
@@ -31,11 +32,17 @@ function rendertask(t){
     t.completed = ! t.completed
     li.classList.toggle('completed') //  takes boolean value
     savetasks()
-  
-  
- })
+  });
+   tasklist.appendChild(li);
+ li.querySelector('button').addEventListener('click',(e)=>{
+    console.log("Clicked oon the delete");
+    e.stopPropagation() //prevent toggle  firings
+    tasks = tasks.filter(tt => tt.id !== t.id)
+    li.remove()
+    savetasks()
+});
 }
 function savetasks(){
-    localStorage.setItem("tasks",JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 })
